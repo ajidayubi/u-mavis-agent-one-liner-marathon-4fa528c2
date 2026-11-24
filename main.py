@@ -35,7 +35,12 @@ def main():
         back = f.read()
     if back != line:
         raise RuntimeError("entry.txt did not round-trip byte for byte")
-    print(line)
+    # Re-check the gate on what is actually on disk, not just on the
+    # in-memory line: the file the judge reads is what must pass.
+    _validate(back)
+    if back.count("\n") + back.count("\r") != 0:
+        raise RuntimeError("entry.txt must hold exactly one line")
+    print("%s (%d chars)" % (line, len(line)))
 
 
 if __name__ == "__main__":
